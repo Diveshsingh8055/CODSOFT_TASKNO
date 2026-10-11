@@ -1,0 +1,67 @@
+# Task 5: Web Data Extraction and Analysis
+
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Step 1: Website URL
+url = "https://books.toscrape.com/"
+
+# Step 2: Send request to website
+response = requests.get(url, timeout=15)
+
+# Check response
+if response.status_code == 200:
+
+    # Step 3: Extract HTML content
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Step 4: Extract book details
+    books = []
+
+    for book in soup.select("article.product_pod"):
+
+        title = book.h3.a["title"]
+
+        price = book.select_one(".price_color").text.strip()
+
+        rating = book.select_one(".star-rating")["class"][1]
+
+        availability = book.select_one(
+            ".availability"
+        ).text.strip()
+
+        books.append({
+            "Title": title,
+            "Price": price,
+            "Rating": rating,
+            "Availability": availability
+        })
+
+    # Step 5: Create DataFrame
+    df = pd.DataFrame(books)
+
+    # Step 6: Clean the price column
+    df["Price"] = (
+        df["Price"]
+        .str.replace("£", "", regex=False)
+        .astype(float)
+    )
+
+    # Convert ratings into numbers
+    rating_map = {
+        "One": 1,
+        "Two": 2,
+        "Three": 3,
+        "Four": 4,
+        "Five": 5
+    }
+
+    df["Rating"] = df["Rating"].map(rating_map)
+
+    # Step 7: Display extracted data
+    print("Extracted Book Data:")
+    print(df.head(10))
+
+    # Step 8: Perform data analysis
