@@ -1,1 +1,96 @@
-Data visualization dashboard
+# TASK 3: DATA VISUALIZATION DASHBOARD
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create Dataset
+data = {
+    'Student': ['A', 'B', 'C', 'D', 'E', 'F'],
+    'Maths': [80, 75, 90, 60, 85, 70],
+    'Science': [85, 70, 95, 65, 80, 75],
+    'English': [75, 80, 85, 70, 90, 65]
+}
+
+df = pd.DataFrame(data)
+
+print("Student Dataset:")
+print(df)
+
+# 1. Bar Chart
+plt.figure(figsize=(8, 5))
+plt.bar(df['Student'], df['Maths'], color='skyblue')
+plt.title('Student Maths Marks')
+plt.xlabel('Students')
+plt.ylabel('Marks')
+plt.show()
+
+# 2. Line Chart
+plt.figure(figsize=(8, 5))
+plt.plot(df['Student'], df['Maths'], marker='o',
+         label='Maths')
+plt.plot(df['Student'], df['Science'], marker='s',
+         label='Science')
+plt.plot(df['Student'], df['English'], marker='^',
+         label='English')
+plt.title('Subject-wise Marks')
+plt.xlabel('Students')
+plt.ylabel('Marks')
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# 3. Pie Chart
+plt.figure(figsize=(7, 7))
+subject_marks = [
+    df['Maths'].mean(),
+    df['Science'].mean(),
+    df['English'].mean()
+]
+
+plt.pie(
+    subject_marks,
+    labels=['Maths', 'Science', 'English'],
+    autopct='%1.1f%%',
+    startangle=90
+)
+plt.title('Average Marks by Subject')
+plt.show()
+
+# 4. Histogram
+plt.figure(figsize=(8, 5))
+plt.hist(df['Maths'], bins=5, color='orange',
+         edgecolor='black')
+plt.title('Distribution of Maths Marks')
+plt.xlabel('Marks')
+plt.ylabel('Number of Students')
+plt.show()
+
+# 5. Scatter Plot
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=df,
+    x='Maths',
+    y='Science',
+    s=100
+)
+plt.title('Maths vs Science Marks')
+plt.xlabel('Maths Marks')
+plt.ylabel('Science Marks')
+plt.grid(True)
+plt.show()
+
+# Data Analysis
+print("\nAverage Marks:")
+print(df[['Maths', 'Science', 'English']].mean())
+
+print("\nHighest Maths Marks:",
+      df['Maths'].max())
+
+print("Highest Science Marks:",
+      df['Science'].max())
+
+print("Highest English Marks:",
+      df['English'].max())
+
+print("\nDashboard completed successfully!")
